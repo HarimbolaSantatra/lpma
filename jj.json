@@ -1,0 +1,12 @@
+{
+	"muscle-and-fitness": {
+		"name": "muscle-and-fitness",
+		"path": "//home//santatra//projet_kely//js//react//reverse-engineer//muscle-and-fitness",
+		"type": "front-end"
+	},
+	"rfid": {
+		"name": "rfid",
+		"path": "//home//santatra//projet_kely//django//rfid",
+		"type": "embedded"
+	}
+}
