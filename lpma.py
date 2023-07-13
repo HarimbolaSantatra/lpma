@@ -4,7 +4,10 @@ import argparse
 
 FILENAME = "jj.json"
 VERSION = '1.00'
-DESCRIPTION = 'Local Project Manager (lpma) handle your local programming project.'
+DESCRIPTION = """ 
+Local Project Manager (lpma) handle your local programming project. 
+Without argument, list all projects.
+"""
 
 
 def read_file(filename):
@@ -25,6 +28,7 @@ def print_header():
     text_wrapper = textwrap.TextWrapper(initial_indent="** ")
     print(text_wrapper.wrap("Welcome to lpma!"))
     exit(0)
+
 
 def print_version():
     print("Program version:", VERSION)
@@ -68,35 +72,45 @@ parser = argparse.ArgumentParser(
 )
 
 parser.add_argument('project_name', nargs='?', default=' ',
-                    help='the name of the project')
-parser.add_argument('move', choices=['rock', 'paper', 'scissor'], nargs='?')
+                    help='select a project')
 parser.add_argument('-l', '--long', action='store_true',
-                    help='list project name in long format')
-parser.add_argument('add', nargs='?',
-                    help='add a new project', metavar='add <project_name>')
-parser.add_argument('desc', nargs='?',
-                    help='show description of a project', metavar='desc <project_name>')
-parser.add_argument('rm', nargs='?',
-                    help='remove a project', metavar='rm <project_name>')
+                    help='list projects in long format')
 parser.add_argument('-v', '--version', action='store_true',
                     help='show program version')
 
-args = parser.parse_args()
+subparser = parser.add_subparsers(help='add/describe/remove a project')
 
-if args.version:
+add_parser = subparser.add_parser('add')
+add_parser.add_argument('project_name', nargs='?', help='name of the project')
+
+desc_parser = subparser.add_parser('desc')
+desc_parser.add_argument('project_name', nargs='?', help='name of the project')
+
+rm_parser = subparser.add_parser('rm')
+rm_parser.add_argument('project_name', nargs='?', help='name of the project')
+
+# Parent parser
+p_args = parser.parse_args()
+
+# Subparsers
+add_args = add_parser.parse_args()
+desc_args = desc_parser.parse_args()
+rm_args = rm_parser.parse_args()
+
+if p_args.version:
     print_version()
 
-if args.desc:
-    print_desc('santatra_pro')
-
-if args.add:
-    add_project("santatra_pro")
-
-if args.rm:
-    rm_project('santatra_pro')
-
-if args.long:
+if p_args.long:
     list_more()
 
-if args.project_name == ' ':
+if add_args.project_name:
+    print_desc(add_args.project_name)
+
+if desc_args.project_name:
+    add_project(desc_args.project_name)
+
+if rm_args.project_name:
+    rm_project(rm_args.rm)
+
+if p_args.project_name == ' ':
     list_less()

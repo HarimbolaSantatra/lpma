@@ -1,15 +1,15 @@
 # Usage
+To choose a project:
+
+	lpma <project_name>
+
 To list all your project:
 
-    lpma
+    lpma list
 
 To list with a more description:
 
     lpma -l|--long
-
-To choose a project:
-
-	lpma <project_name>
 
 To show the detail of a particular project, open the list to find the project ID, then use
 
