@@ -1,8 +1,8 @@
-import json
+import sys
 import textwrap
 import argparse
+import JsonHandler
 
-FILENAME = "jj.json"
 VERSION = '1.00'
 DESCRIPTION = """ 
 Local Project Manager (lpma) handle your local programming project. 
@@ -10,24 +10,9 @@ Without argument, list all projects.
 """
 
 
-def read_file(filename):
-    s = ""
-    file = open(filename)
-    s = file.read()
-    file.close()
-    return s
-
-
-def get_value(keyName):
-    decoder = json.JSONDecoder()
-    j_dict = decoder.decode(s)
-    return j_dict[keyName]
-
-
 def print_header():
     text_wrapper = textwrap.TextWrapper(initial_indent="** ")
     print(text_wrapper.wrap("Welcome to lpma!"))
-    exit(0)
 
 
 def print_version():
@@ -35,82 +20,72 @@ def print_version():
     exit(0)
 
 
-def list_less():
+def list_less(project_name):
     print("List less")
-    exit(0)
 
 
-def list_more():
+def list_more(project_name):
     print("List more")
-    exit(0)
 
 
-def select(project_name):
+def select_project(project_name):
     print("Select:", project_name)
-    exit(0)
 
 
 def print_desc(project_name):
-    print("Describe:", project_name)
-    exit(0)
+    JsonHandler.print_desc(project_name)
 
 
 def add_project(project_name):
     print("Add project:", project_name)
-    exit(0)
 
 
 def rm_project(project_name):
     print("Remove project:", project_name)
-    exit(0)
+
+def main():
+    parser = argparse.ArgumentParser(
+        prog='lpma.py',
+        description=DESCRIPTION,
+        epilog='Handle all your local coding project :)'
+    )
+        
+
+    parser.add_argument('-v', '--version', action='store_true',
+                        help='show program version')
+
+    subparser = parser.add_subparsers()
+
+    list_parser = subparser.add_parser('list')
+    list_parser.add_argument('project_name', help='name of the project')
+    list_parser.add_argument('-l', '--long', action='store_true',
+                        help='list projects in long format')
+    list_parser.set_defaults(func=list_less)
+
+    add_parser = subparser.add_parser('add')
+    add_parser.add_argument('project_name', help='name of the project')
+    add_parser.set_defaults(func=add_project)
+
+    desc_parser = subparser.add_parser('desc')
+    desc_parser.add_argument('project_name', help='name of the project')
+    desc_parser.set_defaults(func=print_desc)
+
+    rm_parser = subparser.add_parser('rm')
+    rm_parser.add_argument('project_name', help='name of the project')
+    rm_parser.set_defaults(func=rm_project)
 
 
-parser = argparse.ArgumentParser(
-    prog='lpma.py',
-    description=DESCRIPTION,
-    epilog='Handle all your local coding project :)'
-)
+    # Parent parser
+    args = parser.parse_args()
 
-parser.add_argument('project_name', nargs='?', default=' ',
-                    help='select a project')
-parser.add_argument('-l', '--long', action='store_true',
-                    help='list projects in long format')
-parser.add_argument('-v', '--version', action='store_true',
-                    help='show program version')
+    if len(sys.argv) <= 2:
+        parser.print_usage()
+        exit(0)
 
-subparser = parser.add_subparsers(help='add/describe/remove a project')
+    if args.version:
+        print_version()
+    
+    args.func(args.project_name)
 
-add_parser = subparser.add_parser('add')
-add_parser.add_argument('project_name', nargs='?', help='name of the project')
-
-desc_parser = subparser.add_parser('desc')
-desc_parser.add_argument('project_name', nargs='?', help='name of the project')
-
-rm_parser = subparser.add_parser('rm')
-rm_parser.add_argument('project_name', nargs='?', help='name of the project')
-
-# Parent parser
-p_args = parser.parse_args()
-
-# Subparsers
-add_args = add_parser.parse_args()
-desc_args = desc_parser.parse_args()
-rm_args = rm_parser.parse_args()
-
-if p_args.version:
-    print_version()
-
-if p_args.long:
-    list_more()
-
-if add_args.project_name:
-    print_desc(add_args.project_name)
-
-if desc_args.project_name:
-    add_project(desc_args.project_name)
-
-if rm_args.project_name:
-    rm_project(rm_args.rm)
-
-if p_args.project_name == ' ':
-    list_less()
+if __name__ == '__main__':
+    main()
