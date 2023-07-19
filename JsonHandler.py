@@ -12,8 +12,8 @@ def get_key(keyName):
     pass
 
 def print_desc(project_name):
-    d = open_json()
-    print(d)
-    print(f'Project: {d["name"]} ({project_name})')
-    print("Path:", d['path'])
-    print("Improvement:", d['imp'])
+    full_file = open_json()
+    project = full_file[project_name]
+    print(f'Project: {project["name"]} ({project_name})')
+    print("Path:", project['path'])
+    print("Improvement:", project['next-improvement'])
