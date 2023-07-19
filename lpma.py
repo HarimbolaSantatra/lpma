@@ -1,5 +1,4 @@
 import sys
-import textwrap
 import argparse
 import JsonHandler
 
@@ -15,18 +14,13 @@ def check_arg_len(n):
         exit(0)
 
 
-def print_header():
-    text_wrapper = textwrap.TextWrapper(initial_indent="** ")
-    print(text_wrapper.wrap("Welcome to lpma!"))
-
-
 def print_version():
     print("Program version:", VERSION)
     exit(0)
 
 
 def list_less():
-    print("List less")
+    JsonHandler.print_list()
 
 
 def list_more():
