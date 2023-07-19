@@ -9,6 +9,11 @@ Local Project Manager (lpma) handle your local programming project.
 Without argument, list all projects.
 """
 
+def check_arg_len(n):
+    if len(sys.argv) <= n:
+        parser.print_usage()
+        exit(0)
+
 
 def print_header():
     text_wrapper = textwrap.TextWrapper(initial_indent="** ")
@@ -20,11 +25,11 @@ def print_version():
     exit(0)
 
 
-def list_less(project_name):
+def list_less():
     print("List less")
 
 
-def list_more(project_name):
+def list_more():
     print("List more")
 
 
@@ -54,10 +59,9 @@ def main():
     parser.add_argument('-v', '--version', action='store_true',
                         help='show program version')
 
-    subparser = parser.add_subparsers()
+    subparser = parser.add_subparsers(dest='subp_name')
 
     list_parser = subparser.add_parser('list')
-    list_parser.add_argument('project_name', help='name of the project')
     list_parser.add_argument('-l', '--long', action='store_true',
                         help='list projects in long format')
     list_parser.set_defaults(func=list_less)
@@ -74,18 +78,21 @@ def main():
     rm_parser.add_argument('project_name', help='name of the project')
     rm_parser.set_defaults(func=rm_project)
 
-
     # Parent parser
     args = parser.parse_args()
 
-    if len(sys.argv) <= 2:
-        parser.print_usage()
-        exit(0)
-
     if args.version:
         print_version()
-    
-    args.func(args.project_name)
+
+    if args.subp_name == 'list':
+        check_arg_len(1)
+        if args.long:
+            list_more()
+        else:
+            list_less()
+    else:
+        check_arg_len(2)
+        args.func(args.project_name)
 
 if __name__ == '__main__':
     main()
