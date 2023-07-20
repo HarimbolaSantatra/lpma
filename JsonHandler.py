@@ -20,7 +20,11 @@ def print_list(long=False):
 
 def print_desc(project_name):
     full_file = open_json()
-    project = full_file[project_name]
-    print(f'Project: {project["name"]} ({project_name})')
-    print("Path:", project['path'])
-    print("Improvement:", project['next-improvement'])
+    try:
+        project = full_file[project_name]
+        print(f'Project: {project["name"]} ({project_name})')
+        print("Path:", project['path'])
+        print("Improvement:", project['next-improvement'])
+    except KeyError:
+        print(f'{project_name} project doesn\'t exist !')
+    
