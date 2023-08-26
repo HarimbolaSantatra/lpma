@@ -17,15 +17,29 @@ def open_json():
 def print_list(long=False):
     file_dic = open_json()
     PrintUtils.header("List of all project")
+    if not long:
+        print_list_short(file_dic)
+    else:
+        print_list_long(file_dic)
+    PrintUtils.footer()
+
+def print_list_short(file_dic):
     for project in file_dic.values():
         PrintUtils.separator()
-        print(("Project").ljust(20), end="")
-        print(project["name"])
-        print(("Type").ljust(20), end="")
-        PrintUtils.print_array_elements(project["type"])
-        print(("Technology").ljust(20), end="")
-        PrintUtils.print_array_elements(project["technology"])
-    PrintUtils.footer()
+        PrintUtils.clean_line("Project:", project["name"])
+        PrintUtils.clean_line("Type:", project["type"], isArray=True)
+        PrintUtils.clean_line("Technology:", project["technology"], isArray=True)
+
+def print_list_long(file_dic):
+    for project in file_dic.values():
+        PrintUtils.separator()
+        PrintUtils.clean_line("Project:", project["name"])
+        PrintUtils.clean_line("Type:", project["type"], isArray=True)
+        PrintUtils.clean_line("Technology:", project["technology"], isArray=True)
+
+        PrintUtils.clean_line("Path:", project["path"], isPath=True)
+        PrintUtils.clean_line("Next Improvement", project["next-improvement"])
+        PrintUtils.clean_line("Comment", project["comment"])
 
 
 def print_desc(project_name):

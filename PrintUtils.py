@@ -1,4 +1,4 @@
-import textwrap
+import textwrap, os
 from rich import print
 
 # Separators
@@ -40,16 +40,13 @@ def print_array_elements(array):
         else:
             print(el, end=', ')
 
+def clean_line(title, txt, isArray=False, isPath=False, separator=20):
+    if isPath:
+        txt = os.path.abspath(txt)
+    if isArray:
+        print(title.ljust(separator), end="")
+        print_array_elements(txt)
+    else:
+        print(title.ljust(separator), end="")
+        print(txt)
 
-def tabular_line(indexes, values):
-    if len(indexes) != len(values):
-        print("PrintUtils error !")
-        exit(-1)
-    
-    mi = max_str_len(indexes)
-    mv = max_str_len(values)
-
-    for i in range(len(indexes)):
-        ci = str(indexes[i]).rjust(mi, '.')
-        cv = str(values[i])
-        print(textwrap.shorten(f'{ci} : {cv}', width=70, initial_indent=WHSP))
