@@ -33,17 +33,6 @@ def select_project(project_name):
     print("Select:", project_name)
 
 
-def print_desc(project_name):
-    JsonHandler.print_desc(project_name)
-
-
-def add_project(project_prop):
-    JsonHandler.add_project(project_prop)
-
-
-def rm_project(name, verbose):
-    JsonHandler.remove_project(project_name, verbose)
-
 def main():
     parser = argparse.ArgumentParser(
         prog='lpma.py',
@@ -77,12 +66,12 @@ def main():
         help='add comments about the project')
     add_parser.add_argument('-v', '--verbose', action='store_true',
         help='print project description after it is added')
-    add_parser.set_defaults(func=add_project)
+    add_parser.set_defaults(func=JsonHandler.add_project)
 
     desc_parser = subparser.add_parser('desc')
     desc_parser.add_argument('project_name', 
         help='name of the project')
-    desc_parser.set_defaults(func=print_desc)
+    desc_parser.set_defaults(func=JsonHandler.print_desc)
 
     rm_parser = subparser.add_parser('rm')
     rm_parser.add_argument('project_name', 
@@ -113,7 +102,7 @@ def main():
                 "nextImprovement": inputHandler.handleNone(args.nextImprovement, value_type='array'),
                 "comment": inputHandler.handleNone(args.comment)
                 }
-        JsonHandler.add_project(prop, verbose=args.verbose)
+        args.func(prop, args.verbose)
 
     elif args.subp_name == 'rm':
         check_arg_len_less(1, parser)
