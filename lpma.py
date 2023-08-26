@@ -8,7 +8,8 @@ Local Project Manager (lpma) handle your local programming project.
 Without argument, list all projects.
 """
 
-def check_arg_len(n, parser):
+# Check if length of the arg in less than n
+def check_arg_len_less(n, parser):
     if len(sys.argv) <= n:
         parser.print_usage()
         exit(0)
@@ -24,7 +25,7 @@ def list_less():
 
 
 def list_more():
-    print("List more")
+    JsonHandler.print_list(long=True)
 
 
 def select_project(project_name):
@@ -79,13 +80,13 @@ def main():
         print_version()
 
     if args.subp_name == 'list':
-        check_arg_len(1, parser)
+        check_arg_len_less(1, parser)
         if args.long:
             list_more()
         else:
             list_less()
     else:
-        check_arg_len(2, parser)
+        check_arg_len_less(2, parser)
         args.func(args.project_name)
 
 if __name__ == '__main__':

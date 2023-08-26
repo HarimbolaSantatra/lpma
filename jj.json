@@ -2,22 +2,39 @@
   "muscle-and-fitness": {
     "name": "muscle-and-fitness",
     "path": "//home//santatra//projet_kely//js//react//reverse-engineer//muscle-and-fitness",
-    "type": "front-end",
-    "next-improvement": "transparent header",
+    "type": [
+      "front-end"
+    ],
+    "next-improvement": [
+      "transparent header",
+      ""
+    ],
+    "technology": ["web", "react"],
     "comment": ""
   },
   "rfid": {
     "name": "rfid",
     "path": "//home//santatra//projet_kely//django//rfid",
-    "type": "embedded",
-    "next-improvement": "bad documentation",
+    "type": [
+      "embedded"
+    ],
+    "technology": ["python"],
+    "next-improvement": [
+      "bad documentation"
+    ],
     "comment": ""
   },
   "chat-app": {
     "name": "chat-application",
     "path": "//home//santatra//projet_kely//django//chat_app",
-    "type": "back-end",
-    "next-improvement": "better UI",
+    "type": [
+      "back-end"
+    ],
+    "technology": ["python", "django", "web"],
+    "next-improvement": [
+      "better UI",
+      "responsivce design"
+    ],
     "comment": ""
   }
 }

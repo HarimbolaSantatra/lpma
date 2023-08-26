@@ -4,19 +4,29 @@ import PrintUtils
 FILENAME = "jj.json"
 
 def open_json():
+    """
+    --------
+    Return: dict
+        the content of the data file
+    """
     file = open(FILENAME, 'r')
     j_dict = json.load(file)
     file.close()
     return j_dict
 
 def print_list(long=False):
-    full_file = open_json()
-    
-    types = []
-    for v in full_file.values():
-        types.append(v["type"])
-    
-    PrintUtils.tabular_line(list(full_file.keys()), types)
+    file_dic = open_json()
+    PrintUtils.header("List of all project")
+    for project in file_dic.values():
+        PrintUtils.separator()
+        print(("Project").ljust(20), end="")
+        print(project["name"])
+        print(("Type").ljust(20), end="")
+        PrintUtils.print_array_elements(project["type"])
+        print(("Technology").ljust(20), end="")
+        PrintUtils.print_array_elements(project["technology"])
+    PrintUtils.footer()
+
 
 def print_desc(project_name):
     full_file = open_json()

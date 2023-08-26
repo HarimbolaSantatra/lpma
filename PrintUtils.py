@@ -1,7 +1,12 @@
 import textwrap
+from rich import print
 
+# Separators
 WHSP = "    "
 ASTERIX = "*** "
+END_SEP = "="
+SEPARATOR = "-"
+SEP_LEN = 60
 
 
 def max_str_len(strs):
@@ -12,9 +17,28 @@ def max_str_len(strs):
     return max_len
 
 
-def header():
-    welcome = WHSP + "Welcome to lpma!" + WHSP
-    print(welcome.center(40, '='))
+def header(title):
+    print()
+    welcome = WHSP + title + WHSP
+    print(welcome.center(SEP_LEN, END_SEP))
+
+
+def footer():
+    print(END_SEP*SEP_LEN)
+    print()
+
+
+def separator():
+    print(SEPARATOR * SEP_LEN)
+
+
+def print_array_elements(array):
+    for el in array:
+        if array.index(el) == len(array)-1 :
+            # if it is the last element
+            print(el, end='\n')
+        else:
+            print(el, end=', ')
 
 
 def tabular_line(indexes, values):
