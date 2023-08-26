@@ -46,7 +46,7 @@ def print_desc(project_name):
     full_file = open_json()
 
     # if project exist
-    if project_name in full_file:
+    if project_name.lower() in full_file:
         project = full_file[project_name]
         PrintUtils.header("Description")
         PrintUtils.clean_line("Project:", project["name"])
@@ -74,11 +74,11 @@ def add_project(prop, verbose=False):
     with open(FILENAME, 'r+') as file:
         data = json.load(file)
         # check if project already exist
-        if prop['name'] in data.keys():
+        if prop['name'].lower() in data.keys():
             PrintUtils.error("Project already exists !")
             exit(1)
         else:
-            data[prop['name']] = prop
+            data[prop['name'].lower()] = prop
             try:
                 file.seek(0)
                 json.dump(data, file)
@@ -87,7 +87,7 @@ def add_project(prop, verbose=False):
             except:
                 PrintUtils.error("Unknown Error when saving data !")
             if verbose:
-                print_desc(prop['name'])
+                print_desc(prop['name'].lower())
 
 
 def remove_project(name, verbose):
