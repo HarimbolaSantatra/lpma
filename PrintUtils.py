@@ -1,5 +1,6 @@
 import textwrap, os
 from rich import print
+from rich.console import Console
 
 # Separators
 WHSP = "    "
@@ -49,4 +50,8 @@ def clean_line(title, txt, isArray=False, isPath=False, separator=20):
     else:
         print(title.ljust(separator), end="")
         print(txt)
+
+def error(error_msg):
+    error_console = Console(stderr=True, style="bold red")
+    error_console.print(error_msg)
 

@@ -44,11 +44,16 @@ def print_list_long(file_dic):
 
 def print_desc(project_name):
     full_file = open_json()
-    try:
+
+    # if project exist
+    if project_name in full_file:
         project = full_file[project_name]
-        print(f'Project: {project["name"]} ({project_name})')
-        print("Path:", project['path'])
-        print("Improvement:", project['next-improvement'])
-    except KeyError:
-        print(f'{project_name} project doesn\'t exist !')
+        PrintUtils.header("Description")
+        PrintUtils.clean_line("Project:", project["name"])
+        PrintUtils.clean_line("Path:", project["path"], isPath=True)
+        PrintUtils.clean_line("Next Improvement", project["next-improvement"])
+    else:
+        PrintUtils.error(f'{project_name} doesn\'t exist !')
     
+    PrintUtils.footer()
+
