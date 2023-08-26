@@ -57,6 +57,7 @@ def print_desc(project_name):
     
     PrintUtils.footer()
 
+
 def add_project(prop, verbose=False):
     """
     Parameter:
@@ -87,4 +88,21 @@ def add_project(prop, verbose=False):
                 PrintUtils.error("Unknown Error when saving data !")
             if verbose:
                 print_desc(prop['name'])
+
+
+def remove_project(name, verbose):
+    with open(FILENAME, 'r+') as file:
+        data = json.load(file)
+        # check if project exist
+        if name not in data.keys():
+            PrintUtils.error("Project doesn't exist !")
+            exit(1)
+        else:
+            del data[name]
+            file.seek(0)
+            json.dump(data, file)
+            file.truncate(file.tell())
+            PrintUtils.success("Project removed successfully !")
+            if verbose:
+                print_list()
 

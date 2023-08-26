@@ -40,8 +40,8 @@ def add_project(project_prop):
     JsonHandler.add_project(project_prop)
 
 
-def rm_project(project_name):
-    print("Remove project:", project_name)
+def rm_project(name, verbose):
+    JsonHandler.remove_project(project_name, verbose)
 
 def main():
     parser = argparse.ArgumentParser(
@@ -86,7 +86,9 @@ def main():
     rm_parser = subparser.add_parser('rm')
     rm_parser.add_argument('project_name', 
         help='name of the project')
-    rm_parser.set_defaults(func=rm_project)
+    rm_parser.add_argument('-v', '--verbose', action='store_true', 
+        help='show result after deletion')
+    rm_parser.set_defaults(func=JsonHandler.remove_project)
 
     # Parent parser
     args = parser.parse_args()
@@ -111,6 +113,11 @@ def main():
                 "comment": args.comment
                 }
         JsonHandler.add_project(prop, verbose=args.verbose)
+
+    elif args.subp_name == 'rm':
+        check_arg_len_less(1, parser)
+        args.func(args.project_name, args.verbose)
+
     else:
         check_arg_len_less(2, parser)
         args.func(args.project_name)
