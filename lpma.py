@@ -1,6 +1,7 @@
 import sys
 import argparse
 import JsonHandler
+import inputHandler
 
 VERSION = '1.00'
 DESCRIPTION = """ 
@@ -65,7 +66,7 @@ def main():
     add_parser.add_argument('-n', '--name', action='store',
         help='name of the project [REQUIRED]', required=True)
     add_parser.add_argument('-p', '--path', action='store',
-        help='local path')
+        help='local path', required=True)
     add_parser.add_argument('-t', '--type', action='append',
         help='type of the project; e.g, design, database, cli, ...')
     add_parser.add_argument('-T', '--technology', action='append',
@@ -107,10 +108,10 @@ def main():
         prop = {
                 "name": args.name,
                 "path": args.path,
-                "type": args.type,
-                "technology": args.technology,
-                "nextImprovement": args.nextImprovement,
-                "comment": args.comment
+                "type": inputHandler.handleNone(args.type, value_type='array'),
+                "technology": inputHandler.handleNone(args.technology, value_type='array'),
+                "nextImprovement": inputHandler.handleNone(args.nextImprovement, value_type='array'),
+                "comment": inputHandler.handleNone(args.comment)
                 }
         JsonHandler.add_project(prop, verbose=args.verbose)
 
