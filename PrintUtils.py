@@ -55,3 +55,6 @@ def error(error_msg):
     error_console = Console(stderr=True, style="bold red")
     error_console.print(error_msg)
 
+def success(succ_msg):
+    succ_console = Console(style="bold green")
+    succ_console.print(succ_msg)

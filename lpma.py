@@ -8,8 +8,8 @@ Local Project Manager (lpma) handle your local programming project.
 Without argument, list all projects.
 """
 
-# Check if length of the arg in less than n
 def check_arg_len_less(n, parser):
+    # Check if length of the arg is less than n
     if len(sys.argv) <= n:
         parser.print_usage()
         exit(0)
@@ -36,8 +36,8 @@ def print_desc(project_name):
     JsonHandler.print_desc(project_name)
 
 
-def add_project(project_name):
-    print("Add project:", project_name)
+def add_project(project_prop):
+    JsonHandler.add_project(project_prop)
 
 
 def rm_project(project_name):
@@ -50,7 +50,6 @@ def main():
         epilog='Handle all your local coding project :)'
     )
         
-
     parser.add_argument('-v', '--version', action='store_true',
                         help='show program version')
 
@@ -61,16 +60,32 @@ def main():
                         help='list projects in long format')
     list_parser.set_defaults(func=list_less)
 
+    # ADD
     add_parser = subparser.add_parser('add')
-    add_parser.add_argument('project_name', help='name of the project')
+    add_parser.add_argument('-n', '--name', action='store',
+        help='name of the project [REQUIRED]', required=True)
+    add_parser.add_argument('-p', '--path', action='store',
+        help='local path')
+    add_parser.add_argument('-t', '--type', action='append',
+        help='type of the project; e.g, design, database, cli, ...')
+    add_parser.add_argument('-T', '--technology', action='append',
+        help='technology/framework/library used (e.g, NextJS, Unity, C/C++')
+    add_parser.add_argument('-i', '--nextImprovement', action='append',
+        help='store further improvement to be done or issue to be fixed')
+    add_parser.add_argument('-c', '--comment', action='store',
+        help='add comments about the project')
+    add_parser.add_argument('-v', '--verbose', action='store_true',
+        help='print project description after it is added')
     add_parser.set_defaults(func=add_project)
 
     desc_parser = subparser.add_parser('desc')
-    desc_parser.add_argument('project_name', help='name of the project')
+    desc_parser.add_argument('project_name', 
+        help='name of the project')
     desc_parser.set_defaults(func=print_desc)
 
     rm_parser = subparser.add_parser('rm')
-    rm_parser.add_argument('project_name', help='name of the project')
+    rm_parser.add_argument('project_name', 
+        help='name of the project')
     rm_parser.set_defaults(func=rm_project)
 
     # Parent parser
@@ -85,6 +100,17 @@ def main():
             list_more()
         else:
             list_less()
+    elif args.subp_name == 'add':
+        check_arg_len_less(1, parser)
+        prop = {
+                "name": args.name,
+                "path": args.path,
+                "type": args.type,
+                "technology": args.technology,
+                "nextImprovement": args.nextImprovement,
+                "comment": args.comment
+                }
+        JsonHandler.add_project(prop, verbose=args.verbose)
     else:
         check_arg_len_less(2, parser)
         args.func(args.project_name)

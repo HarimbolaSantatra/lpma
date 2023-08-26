@@ -38,7 +38,7 @@ def print_list_long(file_dic):
         PrintUtils.clean_line("Technology:", project["technology"], isArray=True)
 
         PrintUtils.clean_line("Path:", project["path"], isPath=True)
-        PrintUtils.clean_line("Next Improvement", project["next-improvement"])
+        PrintUtils.clean_line("Next Improvement", project["nextImprovement"])
         PrintUtils.clean_line("Comment", project["comment"])
 
 
@@ -51,9 +51,40 @@ def print_desc(project_name):
         PrintUtils.header("Description")
         PrintUtils.clean_line("Project:", project["name"])
         PrintUtils.clean_line("Path:", project["path"], isPath=True)
-        PrintUtils.clean_line("Next Improvement", project["next-improvement"])
+        PrintUtils.clean_line("Next Improvement", project["nextImprovement"])
     else:
         PrintUtils.error(f'{project_name} doesn\'t exist !')
     
     PrintUtils.footer()
+
+def add_project(prop, verbose=False):
+    """
+    Parameter:
+    ------------
+    prop: dic
+        dic containing all the project properties (e.g, name, description, type, path, etc)
+
+    Return
+    --------
+    null
+    """
+
+    # open file in read/write mode
+    with open(FILENAME, 'r+') as file:
+        data = json.load(file)
+        # check if project already exist
+        if prop['name'] in data.keys():
+            PrintUtils.error("Project already exists !")
+            exit(1)
+        else:
+            data[prop['name']] = prop
+            try:
+                file.seek(0)
+                json.dump(data, file)
+                file.truncate(file.tell())
+                PrintUtils.success("Data loaded !")
+            except:
+                PrintUtils.error("Unknown Error when saving data !")
+            if verbose:
+                print_desc(prop['name'])
 
