@@ -1,0 +1,80 @@
+{
+    "muscle-and-fitness": {
+        "name": "muscle-and-fitness",
+        "path": "//home//santatra//projet_kely//js//react//reverse-engineer//muscle-and-fitness",
+        "type": [
+            "front-end"
+        ],
+        "nextImprovement": [
+            "transparent header",
+            ""
+        ],
+        "technology": [
+            "web",
+            "react"
+        ],
+        "comment": ""
+    },
+    "rfid": {
+        "name": "rfid",
+        "path": "//home//santatra//projet_kely//django//rfid",
+        "type": [
+            "embedded"
+        ],
+        "technology": [
+            "python"
+        ],
+        "nextImprovement": [
+            "bad documentation"
+        ],
+        "comment": ""
+    },
+    "chat-app": {
+        "name": "chat-application",
+        "path": "//home//santatra//projet_kely//django//chat_app",
+        "type": [
+            "back-end"
+        ],
+        "technology": [
+            "python",
+            "django",
+            "web"
+        ],
+        "nextImprovement": [
+            "better UI",
+            "responsivce design"
+        ],
+        "comment": ""
+    },
+    "cocktail": {
+        "name": "cocktail",
+        "path": "/home/santatra/projet_kely/js/react/cocktail/",
+        "type": [
+            "design"
+        ],
+        "technology": [
+            "react",
+            "webAPI"
+        ],
+        "nextImprovement": [
+            "Make design"
+        ],
+        "comment": ""
+    },
+    "portfolio": {
+        "name": "portfolio",
+        "path": "/home/santatra",
+        "type": [
+            ""
+        ],
+        "technology": [
+            "web",
+            "javascript",
+            "css"
+        ],
+        "nextImprovement": [
+            ""
+        ],
+        "comment": ""
+    }
+}
