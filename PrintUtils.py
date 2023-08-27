@@ -1,4 +1,4 @@
-import textwrap, os
+import os
 from rich import print
 from rich.console import Console
 
