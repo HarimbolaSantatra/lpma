@@ -51,13 +51,13 @@ def print_list_long(file_dic):
         PrintUtils.clean_line("Next Improvement", project["nextImprovement"])
 
 
-def print_desc(project_name):
+def print_desc(id):
     full_file = open_json()
     # if project exist
-    if project_name.lower() in full_file:
-        project = full_file[project_name]
+    if id.lower() in full_file:
+        project = full_file[id]
         PrintUtils.header("Description")
-        PrintUtils.clean_line("Project ID:", project_name)
+        PrintUtils.clean_line("Project ID:", id)
         PrintUtils.clean_line("Project Name:", project["name"])
         PrintUtils.clean_line("Path:", project["path"], isPath=True)
         PrintUtils.clean_line(
@@ -66,7 +66,7 @@ def print_desc(project_name):
         PrintUtils.clean_line("Next Improvement", project["nextImprovement"])
         PrintUtils.clean_line("Comment", project["comment"])
     else:
-        PrintUtils.error(f'{project_name} doesn\'t exist !')
+        PrintUtils.error(f'The project with id \'{id}\' doesn\'t exist !')
     PrintUtils.footer()
 
 
@@ -102,15 +102,15 @@ def add_project(prop, verbose=False):
                 print_desc(prop['name'].lower())
 
 
-def remove_project(name, verbose):
+def remove_project(id, verbose):
     with open(FILENAME, 'r+') as file:
         data = json.load(file)
         # check if project exist
-        if name not in data.keys():
+        if id not in data.keys():
             PrintUtils.error("Project doesn't exist !")
             exit(1)
         else:
-            del data[name]
+            del data[id]
             file.seek(0)
             json.dump(data, file)
             file.truncate(file.tell())
@@ -118,11 +118,11 @@ def remove_project(name, verbose):
             if verbose:
                 print_list()
 
-def edit_project(project_name, prop, verbose=False):
+def edit_project(id, prop, verbose=False):
     """
     Parameter:
     ------------
-    project_name: str
+    id: str
         name of the project. it's different from prop['name'] which is the new name that the user will give
     prop: dic
         dic containing all the project properties (e.g, name, description, type, path, etc)
@@ -130,13 +130,13 @@ def edit_project(project_name, prop, verbose=False):
     with open(FILENAME, 'r+') as file:
         data = json.load(file)
         # check if project exist
-        if project_name.lower() not in data.keys():
+        if id.lower() not in data.keys():
             PrintUtils.error("Project doesn't exist !")
             exit(1)
         else:
             # if arg is present, modify it
             for k,v in prop.items():
-                data[project_name][k] = v
+                data[id][k] = v
 
             # Save data to the file
             try:

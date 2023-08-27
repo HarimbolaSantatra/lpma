@@ -46,7 +46,7 @@ def main():
                         help='list project in very short format')
     list_parser.set_defaults(func=list_less)
 
-    # ADD
+    # ADD PARSER
     add_parser = subparser.add_parser('add', help="Add a project")
     add_parser.add_argument('-n', '--name', action='store',
         help='name of the project [REQUIRED]', required=True)
@@ -64,21 +64,24 @@ def main():
         help='print project description after it is added')
     add_parser.set_defaults(func=JsonHandler.add_project)
 
+    # DESCRIPTION PARSER
     desc_parser = subparser.add_parser('desc', help="Print project description")
-    desc_parser.add_argument('project_name', 
-        help='name of the project')
+    desc_parser.add_argument('id', 
+        help='id of the project')
     desc_parser.set_defaults(func=JsonHandler.print_desc)
 
+    # REMOVE PARSER
     rm_parser = subparser.add_parser('rm', help="Remove a project")
-    rm_parser.add_argument('project_name', 
-        help='name of the project')
+    rm_parser.add_argument('id', 
+        help='ID of the project')
     rm_parser.add_argument('-v', '--verbose', action='store_true', 
         help='show result after deletion')
     rm_parser.set_defaults(func=JsonHandler.remove_project)
 
+    # EDIT PARSER
     edit_parser = subparser.add_parser('edit', help="Edit a project")
-    edit_parser.add_argument('project_name', 
-        help='name of the project')
+    edit_parser.add_argument('id', 
+        help='ID of the project')
     edit_parser.add_argument('-n', '--name', action='store',
         help='new name')
     edit_parser.add_argument('-p', '--path', action='store',
@@ -95,7 +98,7 @@ def main():
         help='print project description after it is added')
     edit_parser.set_defaults(func=JsonHandler.edit_project)
 
-    # Parent parser
+    # PARENT PARSER
     args = parser.parse_args()
 
     if args.version:
@@ -108,6 +111,7 @@ def main():
             list_more()
         else:
             list_less()
+
     elif args.subp_name == 'add':
         prop = {
                 "name": args.name,
@@ -121,6 +125,9 @@ def main():
 
     elif args.subp_name == 'rm':
         args.func(args.project_name, args.verbose)
+
+    elif args.subp_name == 'desc':
+        args.func(args.id)
 
     elif args.subp_name == 'edit':
         prop = {}
