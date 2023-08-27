@@ -1,7 +1,9 @@
 import argparse
 import inputHandler
 import json
-import PrintUtils
+import os
+from rich import print
+from rich.console import Console
 
 VERSION = '1.00'
 DESCRIPTION = """ 
@@ -13,10 +15,77 @@ FILENAME = "data.json"
 PROPS = ['name', 'path', 'type',
          'nextImprovement', 'technology', 'comment']
 
+# Separators
+WHSP = "    "
+ASTERIX = "*** "
+END_SEP = "="
+SEPARATOR = "-"
+SEP_LEN = 60
 
-class JsonHandler:
+
+class PrintUtils:
+
     def __init__(self):
         pass
+
+    def max_str_len(self, strs):
+        max_len = 0
+        for s in strs:
+            if len(str(s)) > max_len:
+                max_len = len(str(s))
+        return max_len
+
+    def header(self, title):
+        print()
+        welcome = WHSP + title + WHSP
+        print(welcome.center(SEP_LEN, END_SEP))
+
+    def footer(self, ):
+        print(END_SEP*SEP_LEN)
+        print()
+
+    def separator(self, ):
+        print(SEPARATOR * SEP_LEN)
+
+    def print_array_elements(self, array):
+        for el in array:
+            if array.index(el) == len(array)-1:
+                # if it is the last element
+                print(el, end='\n')
+            else:
+                print(el, end=', ')
+
+    def clean_line(self, title, txt, isArray=False, isPath=False, separator=20):
+        if isPath:
+            txt = os.path.abspath(txt)
+        if isArray:
+            print(title.ljust(separator), end="")
+            self.print_array_elements(txt)
+        else:
+            print(title.ljust(separator), end="")
+            print(txt)
+
+    def error(self, error_msg):
+        error_console = Console(stderr=True, style="bold red")
+        error_console.print(error_msg)
+
+    def success(self, succ_msg):
+        succ_console = Console(style="bold green")
+        succ_console.print(succ_msg)
+
+
+
+class JsonHandler:
+    def __init__(self, printUtils):
+        """
+        Handle operation about the database.
+
+        Parameters
+        ----------
+        printUtils: PrintUtils
+            instance of PrintUtils class
+        """
+        self.printUtils = printUtils
 
     def open_json(self):
         """
@@ -31,40 +100,40 @@ class JsonHandler:
 
     def print_list_summary(self):
         file_dic = self.open_json()
-        PrintUtils.header("List of all project")
+        self.printUtils.header("List of all project")
         for k in file_dic.keys():
             print(f'- {k}')
-        PrintUtils.footer()
+        self.printUtils.footer()
 
     def print_list(self, long=False):
         file_dic = self.open_json()
-        PrintUtils.header("List of all project")
+        self.printUtils.header("List of all project")
         if not long:
             self.print_list_short(file_dic)
         else:
             self.print_list_long(file_dic)
-        PrintUtils.footer()
+            self.printUtils.footer()
 
     def print_list_short(self, file_dic):
         for key, project in file_dic.items():
-            PrintUtils.separator()
-            PrintUtils.clean_line("ID:", key)
-            PrintUtils.clean_line("Type:", project["type"], isArray=True)
-            PrintUtils.clean_line(
+            self.printUtils.separator()
+            self.printUtils.clean_line("ID:", key)
+            self.printUtils.clean_line("Type:", project["type"], isArray=True)
+            self.printUtils.clean_line(
                 "Technology:", project["technology"], isArray=True)
-            PrintUtils.clean_line("Next Improvement",
+            self.printUtils.clean_line("Next Improvement",
                                   project["nextImprovement"])
 
     def print_list_long(self, file_dic):
         for key, project in file_dic.items():
-            PrintUtils.separator()
-            PrintUtils.clean_line("ID:", key)
-            PrintUtils.clean_line("Project:", project["name"])
-            PrintUtils.clean_line("Type:", project["type"], isArray=True)
-            PrintUtils.clean_line(
+            self.printUtils.separator()
+            self.printUtils.clean_line("ID:", key)
+            self.printUtils.clean_line("Project:", project["name"])
+            self.printUtils.clean_line("Type:", project["type"], isArray=True)
+            self.printUtils.clean_line(
                 "Technology:", project["technology"], isArray=True)
-            PrintUtils.clean_line("Path:", project["path"], isPath=True)
-            PrintUtils.clean_line("Next Improvement",
+            self.printUtils.clean_line("Path:", project["path"], isPath=True)
+            self.printUtils.clean_line("Next Improvement",
                                   project["nextImprovement"])
 
     def print_desc(self, id):
@@ -72,19 +141,19 @@ class JsonHandler:
         # if project exist
         if id.lower() in full_file:
             project = full_file[id]
-            PrintUtils.header("Description")
-            PrintUtils.clean_line("Project ID:", id)
-            PrintUtils.clean_line("Project Name:", project["name"])
-            PrintUtils.clean_line("Path:", project["path"], isPath=True)
-            PrintUtils.clean_line(
+            self.printUtils.header("Description")
+            self.printUtils.clean_line("Project ID:", id)
+            self.printUtils.clean_line("Project Name:", project["name"])
+            self.printUtils.clean_line("Path:", project["path"], isPath=True)
+            self.printUtils.clean_line(
                 "Technology:", project["technology"], isArray=True)
-            PrintUtils.clean_line("Type:", project["type"], isArray=True)
-            PrintUtils.clean_line("Next Improvement",
+            self.printUtils.clean_line("Type:", project["type"], isArray=True)
+            self.printUtils.clean_line("Next Improvement",
                                   project["nextImprovement"])
-            PrintUtils.clean_line("Comment", project["comment"])
+            self.printUtils.clean_line("Comment", project["comment"])
         else:
-            PrintUtils.error(f'The project with id \'{id}\' doesn\'t exist !')
-        PrintUtils.footer()
+            self.printUtils.error(f'The project with id \'{id}\' doesn\'t exist !')
+        self.printUtils.footer()
 
     def add_project(self, prop, verbose=False):
         """
@@ -103,7 +172,7 @@ class JsonHandler:
             data = json.load(file)
             # check if project already exist
             if prop['name'].lower() in data.keys():
-                PrintUtils.error("Project already exists !")
+                self.printUtils.error("Project already exists !")
                 exit(1)
             else:
                 data[prop['name'].lower()] = prop
@@ -111,25 +180,25 @@ class JsonHandler:
                     file.seek(0)
                     json.dump(data, file)
                     file.truncate(file.tell())
-                    PrintUtils.success("Data loaded !")
+                    self.printUtils.success("Data loaded !")
                 except:
-                    PrintUtils.error("Unknown Error when saving data !")
+                    self.printUtils.error("Unknown Error when saving data !")
                 if verbose:
-                    print_desc(prop['name'].lower())
+                    self.print_desc(prop['name'].lower())
 
     def remove_project(self, id, verbose):
         with open(FILENAME, 'r+') as file:
             data = json.load(file)
             # check if project exist
             if id not in data.keys():
-                PrintUtils.error("Project doesn't exist !")
+                self.printUtils.error("Project doesn't exist !")
                 exit(1)
             else:
                 del data[id]
                 file.seek(0)
                 json.dump(data, file)
                 file.truncate(file.tell())
-                PrintUtils.success("Project removed successfully !")
+                self.printUtils.success("Project removed successfully !")
                 if verbose:
                     self.print_list()
 
@@ -146,7 +215,7 @@ class JsonHandler:
             data = json.load(file)
             # check if project exist
             if id.lower() not in data.keys():
-                PrintUtils.error("Project doesn't exist !")
+                self.printUtils.error("Project doesn't exist !")
                 exit(1)
             else:
                 # if arg is present, modify it
@@ -158,14 +227,15 @@ class JsonHandler:
                     file.seek(0)
                     json.dump(data, file)
                     file.truncate(file.tell())
-                    PrintUtils.success("Data loaded !")
+                    self.printUtils.success("Data loaded !")
                 except:
-                    PrintUtils.error("Unknown Error when saving data !")
+                    self.printUtils.error("Unknown Error when saving data !")
                 if verbose:
                     self.print_desc(prop['name'].lower())
 
 
-jsonHandler = JsonHandler()
+printUtils = PrintUtils()
+jsonHandler = JsonHandler(printUtils)
 
 
 def print_version():
