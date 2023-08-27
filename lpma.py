@@ -21,16 +21,16 @@ def print_version():
     exit(0)
 
 
+def list_short():
+    JsonHandler.print_list_summary()
+
+
 def list_less():
     JsonHandler.print_list()
 
 
 def list_more():
     JsonHandler.print_list(long=True)
-
-
-def select_project(project_name):
-    print("Select:", project_name)
 
 
 def main():
@@ -48,6 +48,8 @@ def main():
     list_parser = subparser.add_parser('list')
     list_parser.add_argument('-l', '--long', action='store_true',
                         help='list projects in long format')
+    list_parser.add_argument('-s', '--short', action='store_true',
+                        help='list project in very short format')
     list_parser.set_defaults(func=list_less)
 
     # ADD
@@ -80,6 +82,25 @@ def main():
         help='show result after deletion')
     rm_parser.set_defaults(func=JsonHandler.remove_project)
 
+    edit_parser = subparser.add_parser('edit', help="Edit a project")
+    edit_parser.add_argument('project_name', 
+        help='name of the project')
+    edit_parser.add_argument('-n', '--name', action='store',
+        help='new name')
+    edit_parser.add_argument('-p', '--path', action='store',
+        help='local path')
+    edit_parser.add_argument('-t', '--type', action='append',
+        help='type of the project; e.g, design, database, cli, ...')
+    edit_parser.add_argument('-T', '--technology', action='append',
+        help='technology/framework/library used (e.g, NextJS, Unity, C/C++')
+    edit_parser.add_argument('-i', '--nextImprovement', action='append',
+        help='store further improvement to be done or issue to be fixed')
+    edit_parser.add_argument('-c', '--comment', action='store',
+        help='add comments about the project')
+    edit_parser.add_argument('-v', '--verbose', action='store_true',
+        help='print project description after it is added')
+    edit_parser.set_defaults(func=JsonHandler.edit_project)
+
     # Parent parser
     args = parser.parse_args()
 
@@ -88,7 +109,9 @@ def main():
 
     if args.subp_name == 'list':
         check_arg_len_less(1, parser)
-        if args.long:
+        if args.short:
+            list_short()
+        elif args.long:
             list_more()
         else:
             list_less()
@@ -107,6 +130,23 @@ def main():
     elif args.subp_name == 'rm':
         check_arg_len_less(1, parser)
         args.func(args.project_name, args.verbose)
+
+    elif args.subp_name == 'edit':
+        check_arg_len_less(1, parser)
+        prop = {}
+        if args.name is not None:
+            prop["name"] = args.name
+        if args.path is not None:
+            prop["path"] = args.path
+        if args.type is not None:
+            prop["type"] = inputHandler.handleNone(args.type, value_type='array')
+        if args.technology is not None:
+            prop["technology"] = inputHandler.handleNone(args.technology, value_type='array')
+        if args.nextImprovement is not None:
+            prop["nextImprovement"] = inputHandler.handleNone(args.nextImprovement, value_type='array')
+        if args.comment is not None:
+            prop["comment"] = inputHandler.handleNone(args.comment)
+        args.func(args.project_name, prop, args.verbose)
 
     else:
         check_arg_len_less(2, parser)

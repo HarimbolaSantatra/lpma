@@ -2,6 +2,7 @@ import json
 import PrintUtils
 
 FILENAME = "jj.json"
+PROPS = ['name', 'path', 'type', 'nextImprovement', 'technology', 'comment']
 
 def open_json():
     """
@@ -14,6 +15,13 @@ def open_json():
     file.close()
     return j_dict
 
+def print_list_summary():
+    file_dic = open_json()
+    PrintUtils.header("List of all project")
+    for k in file_dic.keys():
+        print(f'- {k}')
+    PrintUtils.footer()
+
 def print_list(long=False):
     file_dic = open_json()
     PrintUtils.header("List of all project")
@@ -24,15 +32,17 @@ def print_list(long=False):
     PrintUtils.footer()
 
 def print_list_short(file_dic):
-    for project in file_dic.values():
+    for key, project in file_dic.items():
         PrintUtils.separator()
+        PrintUtils.clean_line("ID:", key)
         PrintUtils.clean_line("Project:", project["name"])
         PrintUtils.clean_line("Type:", project["type"], isArray=True)
         PrintUtils.clean_line("Technology:", project["technology"], isArray=True)
 
 def print_list_long(file_dic):
-    for project in file_dic.values():
+    for key, project in file_dic.items():
         PrintUtils.separator()
+        PrintUtils.clean_line("ID:", key)
         PrintUtils.clean_line("Project:", project["name"])
         PrintUtils.clean_line("Type:", project["type"], isArray=True)
         PrintUtils.clean_line("Technology:", project["technology"], isArray=True)
@@ -106,3 +116,33 @@ def remove_project(name, verbose):
             if verbose:
                 print_list()
 
+def edit_project(project_name, prop, verbose=False):
+    """
+    Parameter:
+    ------------
+    project_name: str
+        name of the project. it's different from prop['name'] which is the new name that the user will give
+    prop: dic
+        dic containing all the project properties (e.g, name, description, type, path, etc)
+    """
+    with open(FILENAME, 'r+') as file:
+        data = json.load(file)
+        # check if project exist
+        if project_name.lower() not in data.keys():
+            PrintUtils.error("Project doesn't exist !")
+            exit(1)
+        else:
+            # if arg is present, modify it
+            for k,v in prop.items():
+                data[project_name][k] = v
+
+            # Save data to the file
+            try:
+                file.seek(0)
+                json.dump(data, file)
+                file.truncate(file.tell())
+                PrintUtils.success("Data loaded !")
+            except:
+                PrintUtils.error("Unknown Error when saving data !")
+            if verbose:
+                print_desc(prop['name'].lower())
