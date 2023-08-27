@@ -186,13 +186,20 @@ class JsonHandler:
                 if verbose:
                     self.print_desc(prop['name'].lower())
 
-    def remove_project(self, id, verbose):
+    def remove_project(self, id, verbose, ignore):
+        """
+        remove project
+        id: project id
+        verbose: if the command was called with --verbose/-v
+        ignore: if the command was called with --ignore/-i
+        """
         with open(FILENAME, 'r+') as file:
             data = json.load(file)
             # check if project exist
             if id not in data.keys():
-                self.printUtils.error("Project doesn't exist !")
-                exit(1)
+                if not ignore:
+                    self.printUtils.error("Project doesn't exist !")
+                    exit(1)
             else:
                 del data[id]
                 file.seek(0)
@@ -304,6 +311,8 @@ def main():
         help='ID of the project')
     rm_parser.add_argument('-v', '--verbose', action='store_true', 
         help='show result after deletion')
+    rm_parser.add_argument('-i', '--ignore', action='store_true', 
+        help='show no error if project doesn\'t exist')
     rm_parser.set_defaults(func=jsonHandler.remove_project)
 
     # EDIT PARSER
@@ -352,7 +361,7 @@ def main():
         args.func(prop, args.verbose)
 
     elif args.subp_name == 'rm':
-        args.func(args.id, args.verbose)
+        args.func(args.id, args.verbose, args.ignore)
 
     elif args.subp_name == 'desc':
         args.func(args.id)
