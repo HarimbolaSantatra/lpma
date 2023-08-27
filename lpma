@@ -11,7 +11,8 @@ Local Project Manager (lpma) handle your local programming project.
 Without argument, list all projects.
 """
 
-FILENAME = "~/.local/state/lpma/data.json"
+USER = os.environ.get('USER')
+FILENAME = f'/home/{USER}/.local/state/lpma/data.json'
 PROPS = ['name', 'path', 'type',
          'nextImprovement', 'technology', 'comment']
 
