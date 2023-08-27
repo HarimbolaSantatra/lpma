@@ -128,6 +128,7 @@ class JsonHandler:
         self.printUtils.header("List of all project")
         if not long:
             self.print_list_short(file_dic)
+            self.printUtils.footer()
         else:
             self.print_list_long(file_dic)
             self.printUtils.footer()
@@ -309,9 +310,9 @@ def main():
     add_parser.add_argument('-t', '--type', action='append',
         help='type of the project; e.g, design, database, cli, ...')
     add_parser.add_argument('-T', '--technology', action='append',
-        help='technology/framework/library used (e.g, NextJS, Unity, C/C++')
+                            help='technology/framework/library used (e.g, NextJS, Unity, C/C++). Can be called multiple time')
     add_parser.add_argument('-i', '--nextImprovement', action='append',
-        help='store further improvement to be done or issue to be fixed')
+        help='store further improvement to be done or issue to be fixed. Can be called multiple time')
     add_parser.add_argument('-c', '--comment', action='store',
         help='add comments about the project')
     add_parser.add_argument('-v', '--verbose', action='store_true',
@@ -345,9 +346,9 @@ def main():
     edit_parser.add_argument('-t', '--type', action='append',
         help='type of the project; e.g, design, database, cli, ...')
     edit_parser.add_argument('-T', '--technology', action='append',
-        help='technology/framework/library used (e.g, NextJS, Unity, C/C++')
+                             help='technology/framework/library used(e.g, NextJS, Unity, C/C++). Can be called multiple time')
     edit_parser.add_argument('-i', '--nextImprovement', action='append',
-        help='store further improvement to be done or issue to be fixed')
+                             help='store further improvement to be done or issue to be fixed. Can be called multiple time')
     edit_parser.add_argument('-c', '--comment', action='store',
         help='add comments about the project')
     edit_parser.add_argument('-v', '--verbose', action='store_true',
@@ -399,7 +400,7 @@ def main():
             prop["nextImprovement"] = inputHandler.handleNone(args.nextImprovement, value_type='array')
         if args.comment is not None:
             prop["comment"] = inputHandler.handleNone(args.comment)
-        args.func(args.project_name, prop, args.verbose)
+        args.func(args.id, prop, args.verbose)
 
     else:
         # If there's no sub command given
