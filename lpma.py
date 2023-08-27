@@ -53,7 +53,7 @@ def main():
     list_parser.set_defaults(func=list_less)
 
     # ADD
-    add_parser = subparser.add_parser('add')
+    add_parser = subparser.add_parser('add', help="Add a project")
     add_parser.add_argument('-n', '--name', action='store',
         help='name of the project [REQUIRED]', required=True)
     add_parser.add_argument('-p', '--path', action='store',
@@ -70,12 +70,12 @@ def main():
         help='print project description after it is added')
     add_parser.set_defaults(func=JsonHandler.add_project)
 
-    desc_parser = subparser.add_parser('desc')
+    desc_parser = subparser.add_parser('desc', help="Print project description")
     desc_parser.add_argument('project_name', 
         help='name of the project')
     desc_parser.set_defaults(func=JsonHandler.print_desc)
 
-    rm_parser = subparser.add_parser('rm')
+    rm_parser = subparser.add_parser('rm', help="Remove a project")
     rm_parser.add_argument('project_name', 
         help='name of the project')
     rm_parser.add_argument('-v', '--verbose', action='store_true', 
