@@ -35,9 +35,10 @@ def print_list_short(file_dic):
     for key, project in file_dic.items():
         PrintUtils.separator()
         PrintUtils.clean_line("ID:", key)
-        PrintUtils.clean_line("Project:", project["name"])
         PrintUtils.clean_line("Type:", project["type"], isArray=True)
-        PrintUtils.clean_line("Technology:", project["technology"], isArray=True)
+        PrintUtils.clean_line(
+            "Technology:", project["technology"], isArray=True)
+        PrintUtils.clean_line("Next Improvement", project["nextImprovement"])
 
 def print_list_long(file_dic):
     for key, project in file_dic.items():
@@ -46,25 +47,26 @@ def print_list_long(file_dic):
         PrintUtils.clean_line("Project:", project["name"])
         PrintUtils.clean_line("Type:", project["type"], isArray=True)
         PrintUtils.clean_line("Technology:", project["technology"], isArray=True)
-
         PrintUtils.clean_line("Path:", project["path"], isPath=True)
         PrintUtils.clean_line("Next Improvement", project["nextImprovement"])
-        PrintUtils.clean_line("Comment", project["comment"])
 
 
 def print_desc(project_name):
     full_file = open_json()
-
     # if project exist
     if project_name.lower() in full_file:
         project = full_file[project_name]
         PrintUtils.header("Description")
-        PrintUtils.clean_line("Project:", project["name"])
+        PrintUtils.clean_line("Project ID:", project_name)
+        PrintUtils.clean_line("Project Name:", project["name"])
         PrintUtils.clean_line("Path:", project["path"], isPath=True)
+        PrintUtils.clean_line(
+            "Technology:", project["technology"], isArray=True)
+        PrintUtils.clean_line("Type:", project["type"], isArray=True)
         PrintUtils.clean_line("Next Improvement", project["nextImprovement"])
+        PrintUtils.clean_line("Comment", project["comment"])
     else:
         PrintUtils.error(f'{project_name} doesn\'t exist !')
-    
     PrintUtils.footer()
 
 
