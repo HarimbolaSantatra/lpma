@@ -9,12 +9,6 @@ Local Project Manager (lpma) handle your local programming project.
 Without argument, list all projects.
 """
 
-def check_arg_len_less(n, parser):
-    # Check if length of the arg is less than n
-    if len(sys.argv) <= n:
-        parser.print_usage()
-        exit(0)
-
 
 def print_version():
     print("Program version:", VERSION)
@@ -108,7 +102,6 @@ def main():
         print_version()
 
     if args.subp_name == 'list':
-        check_arg_len_less(1, parser)
         if args.short:
             list_short()
         elif args.long:
@@ -116,7 +109,6 @@ def main():
         else:
             list_less()
     elif args.subp_name == 'add':
-        check_arg_len_less(1, parser)
         prop = {
                 "name": args.name,
                 "path": args.path,
@@ -128,11 +120,9 @@ def main():
         args.func(prop, args.verbose)
 
     elif args.subp_name == 'rm':
-        check_arg_len_less(1, parser)
         args.func(args.project_name, args.verbose)
 
     elif args.subp_name == 'edit':
-        check_arg_len_less(1, parser)
         prop = {}
         if args.name is not None:
             prop["name"] = args.name
@@ -149,8 +139,8 @@ def main():
         args.func(args.project_name, prop, args.verbose)
 
     else:
-        check_arg_len_less(2, parser)
-        args.func(args.project_name)
+        # If there's no sub command given
+        parser.print_usage()
 
 if __name__ == '__main__':
     main()
