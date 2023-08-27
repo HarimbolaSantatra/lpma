@@ -2,8 +2,12 @@
 import argparse
 import json
 import os
-from rich import print
-from rich.console import Console
+try:
+    from rich import print
+    from rich.console import Console
+except ModuleNotFoundError:
+    print("Python module 'rich' not found. Maybe you forget to activate a virtual environment")
+    exit(1)
 
 VERSION = '1.00'
 DESCRIPTION = """ 
