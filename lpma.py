@@ -10,7 +10,7 @@ Local Project Manager (lpma) handle your local programming project.
 Without argument, list all projects.
 """
 
-FILENAME = "data.json"
+FILENAME = "~/.local/state/lpma/data.json"
 PROPS = ['name', 'path', 'type',
          'nextImprovement', 'technology', 'comment']
 
