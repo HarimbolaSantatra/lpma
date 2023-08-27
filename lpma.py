@@ -1,5 +1,4 @@
 import argparse
-import inputHandler
 import json
 import os
 from rich import print
@@ -21,6 +20,23 @@ ASTERIX = "*** "
 END_SEP = "="
 SEPARATOR = "-"
 SEP_LEN = 60
+
+
+class InputHandler:
+    def __init__(self):
+        pass
+    def handleNone(self, value, value_type='string'):
+        """
+        Return empty string instead of None or null
+        """
+        if value_type == 'string' or value_type == 'str':
+            r = value if value is not None else ""
+        elif value_type == 'array' or value_type == 'list':
+            r = value if value is not None else [""]
+        else:
+            raise Exception(
+                "value_type must be one of the following: { string|str, array|list }")
+        return r
 
 
 class PrintUtils:
@@ -243,6 +259,7 @@ class JsonHandler:
 
 printUtils = PrintUtils()
 jsonHandler = JsonHandler(printUtils)
+inputHandler = InputHandler()
 
 
 def print_version():
