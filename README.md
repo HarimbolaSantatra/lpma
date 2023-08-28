@@ -1,7 +1,9 @@
 # ABOUT
 **lpma**: Local Project MAnager. Manage your local hobbies project.
 
-Are you a relentless programmer with equally relentless procrastination ? Maybe you gave up a project months ago and you want to make sure you will remember the state you left it when you go back. Maybe you have some free time to spend programming, and you have so many project in mind but you can't decide where to start. **lpma** basically lists all your *lost love* and let you compare and decide which one to work one, or which one are you exited about in the moment.
+Are you a relentless programmer with equally relentless procrastination ? Maybe you gave up a project months ago and you want to make sure you will remember the state you left it when you go back. Maybe you have some free time to spend programming, and you have so many project in mind but you can't decide where to start. **lpma** basically lists all your *lost love* and let you compare and decide which one to work on, or which one are you exited about in the moment.
+It also serves as a ToDo list for all your project.
+
 
 # Installation
 Clone the repo:
